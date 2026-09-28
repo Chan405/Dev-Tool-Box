@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Box from "@mui/material/Box";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Footer />
           </Box>
         </ThemeRegistry>
+        <Analytics />
       </body>
     </html>
   );

@@ -5,13 +5,16 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import visuallyHidden from "@mui/utils/visuallyHidden";
+import { trackCopyOutput } from "@/lib/analytics/product-analytics";
 
 type CopyButtonProps = {
   value: string;
   disabled?: boolean;
+  /** Registry slug for privacy-safe copy analytics (metadata only). */
+  analyticsTool?: string;
 };
 
-export function CopyButton({ value, disabled = false }: CopyButtonProps) {
+export function CopyButton({ value, disabled = false, analyticsTool }: CopyButtonProps) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
   const timeoutRef = useRef<number | null>(null);
   const isDisabled = disabled || value.length === 0;
@@ -32,6 +35,9 @@ export function CopyButton({ value, disabled = false }: CopyButtonProps) {
     try {
       await navigator.clipboard.writeText(value);
       setStatus("copied");
+      if (analyticsTool) {
+        trackCopyOutput(analyticsTool);
+      }
     } catch {
       setStatus("failed");
     }

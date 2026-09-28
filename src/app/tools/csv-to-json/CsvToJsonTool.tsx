@@ -12,6 +12,9 @@ import { ToolPrivacyAlert } from "@/components/tool-ui/ToolPrivacyAlert";
 import { useDualPaneTool } from "@/components/tool-ui/use-dual-pane-tool";
 import { csvToJson } from "@/lib/csv/parse-csv-to-json";
 import { CSV_EXAMPLE } from "@/lib/examples/tool-examples";
+import { trackToolAction } from "@/lib/analytics/product-analytics";
+
+const TOOL_SLUG = "csv-to-json";
 
 export function CsvToJsonTool() {
   const tool = useDualPaneTool();
@@ -20,6 +23,7 @@ export function CsvToJsonTool() {
   const handleConvert = useCallback(() => {
     const result = csvToJson(tool.input, { useFirstRowAsHeaders: useHeaders });
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "convert");
       tool.applySuccess(result.output, `Converted ${result.rowCount} row${result.rowCount === 1 ? "" : "s"} to JSON.`);
       return;
     }
@@ -58,11 +62,12 @@ export function CsvToJsonTool() {
             <Button type="button" onClick={tool.clearAll} disabled={!tool.hasInput && !tool.hasOutput}>
               Clear
             </Button>
-            <CopyButton value={tool.output} />
+            <CopyButton value={tool.output} analyticsTool={TOOL_SLUG} />
             <DownloadButton
               value={tool.output}
               filename="data.json"
               mimeType="application/json;charset=utf-8"
+              analyticsTool={TOOL_SLUG}
             />
           </Stack>
           <FormControlLabel

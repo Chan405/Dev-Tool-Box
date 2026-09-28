@@ -10,6 +10,9 @@ import { ToolPrivacyAlert } from "@/components/tool-ui/ToolPrivacyAlert";
 import { useDualPaneTool } from "@/components/tool-ui/use-dual-pane-tool";
 import { jsonToCsv } from "@/lib/csv/json-to-csv";
 import { JSON_ARRAY_EXAMPLE } from "@/lib/examples/tool-examples";
+import { trackToolAction } from "@/lib/analytics/product-analytics";
+
+const TOOL_SLUG = "json-to-csv";
 
 export function JsonToCsvTool() {
   const tool = useDualPaneTool();
@@ -17,6 +20,7 @@ export function JsonToCsvTool() {
   const handleConvert = useCallback(() => {
     const result = jsonToCsv(tool.input);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "convert");
       tool.applySuccess(result.output, `Exported ${result.rowCount} row${result.rowCount === 1 ? "" : "s"} to CSV.`);
       return;
     }
@@ -55,8 +59,8 @@ export function JsonToCsvTool() {
           <Button type="button" onClick={tool.clearAll} disabled={!tool.hasInput && !tool.hasOutput}>
             Clear
           </Button>
-          <CopyButton value={tool.output} />
-          <DownloadButton value={tool.output} filename="data.csv" mimeType="text/csv;charset=utf-8" />
+          <CopyButton value={tool.output} analyticsTool={TOOL_SLUG} />
+          <DownloadButton value={tool.output} filename="data.csv" mimeType="text/csv;charset=utf-8" analyticsTool={TOOL_SLUG} />
         </Stack>
       }
     />

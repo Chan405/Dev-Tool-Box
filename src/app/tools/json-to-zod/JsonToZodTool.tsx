@@ -11,6 +11,9 @@ import { ToolPrivacyAlert } from "@/components/tool-ui/ToolPrivacyAlert";
 import { useDualPaneTool } from "@/components/tool-ui/use-dual-pane-tool";
 import { JSON_OBJECT_EXAMPLE } from "@/lib/examples/tool-examples";
 import { jsonToZod } from "@/lib/zod/json-to-zod";
+import { trackToolAction } from "@/lib/analytics/product-analytics";
+
+const TOOL_SLUG = "json-to-zod";
 
 export function JsonToZodTool() {
   const tool = useDualPaneTool();
@@ -19,6 +22,7 @@ export function JsonToZodTool() {
   const handleConvert = useCallback(() => {
     const result = jsonToZod(tool.input, rootName);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "convert");
       tool.applySuccess(result.output, "Zod schema generated successfully.");
       return;
     }
@@ -58,8 +62,8 @@ export function JsonToZodTool() {
             <Button type="button" onClick={tool.clearAll} disabled={!tool.hasInput && !tool.hasOutput}>
               Clear
             </Button>
-            <CopyButton value={tool.output} />
-            <DownloadButton value={tool.output} filename="schema.ts" mimeType="text/plain;charset=utf-8" />
+            <CopyButton value={tool.output} analyticsTool={TOOL_SLUG} />
+            <DownloadButton value={tool.output} filename="schema.ts" mimeType="text/plain;charset=utf-8" analyticsTool={TOOL_SLUG} />
           </Stack>
           <TextField
             label="Root schema name"

@@ -17,6 +17,9 @@ import { formatJson } from "@/lib/json/format-json";
 import { minifyJson } from "@/lib/json/minify-json";
 import type { JsonParseErrorDetails } from "@/lib/json/parse-json";
 import { validateJson } from "@/lib/json/validate-json";
+import { trackToolAction } from "@/lib/analytics/product-analytics";
+
+const TOOL_SLUG = "json-formatter";
 
 type JsonAction = "format" | "minify" | "validate";
 
@@ -100,6 +103,7 @@ export function JsonFormatter() {
   const handleFormat = useCallback(() => {
     const result = formatJson(input);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "format");
       applySuccess("format", result.output, "JSON formatted successfully.");
       return;
     }
@@ -109,6 +113,7 @@ export function JsonFormatter() {
   const handleMinify = useCallback(() => {
     const result = minifyJson(input);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "minify");
       applySuccess("minify", result.output, "JSON minified successfully.");
       return;
     }
@@ -118,6 +123,7 @@ export function JsonFormatter() {
   const handleValidate = useCallback(() => {
     const result = validateJson(input);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "validate");
       applySuccess("validate", result.output, "Valid JSON. Syntax checks passed.");
       return;
     }
@@ -175,11 +181,12 @@ export function JsonFormatter() {
         <Button type="button" onClick={handleClear} disabled={!hasInput && !hasOutput}>
           Clear
         </Button>
-        <CopyButton value={feedback.output} />
+        <CopyButton value={feedback.output} analyticsTool={TOOL_SLUG} />
         <DownloadButton
           value={feedback.output}
           filename={downloadFilename(feedback.lastAction)}
           mimeType="application/json;charset=utf-8"
+          analyticsTool={TOOL_SLUG}
         />
       </Stack>
 

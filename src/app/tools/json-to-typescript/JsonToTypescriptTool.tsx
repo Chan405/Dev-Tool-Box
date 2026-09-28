@@ -11,6 +11,9 @@ import { ToolPrivacyAlert } from "@/components/tool-ui/ToolPrivacyAlert";
 import { useDualPaneTool } from "@/components/tool-ui/use-dual-pane-tool";
 import { JSON_OBJECT_EXAMPLE } from "@/lib/examples/tool-examples";
 import { jsonToTypescript } from "@/lib/typescript/json-to-typescript";
+import { trackToolAction } from "@/lib/analytics/product-analytics";
+
+const TOOL_SLUG = "json-to-typescript";
 
 export function JsonToTypescriptTool() {
   const tool = useDualPaneTool();
@@ -19,6 +22,7 @@ export function JsonToTypescriptTool() {
   const handleConvert = useCallback(() => {
     const result = jsonToTypescript(tool.input, rootName);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "convert");
       tool.applySuccess(result.output, "TypeScript types generated successfully.");
       return;
     }
@@ -58,8 +62,8 @@ export function JsonToTypescriptTool() {
             <Button type="button" onClick={tool.clearAll} disabled={!tool.hasInput && !tool.hasOutput}>
               Clear
             </Button>
-            <CopyButton value={tool.output} />
-            <DownloadButton value={tool.output} filename="types.ts" mimeType="text/plain;charset=utf-8" />
+            <CopyButton value={tool.output} analyticsTool={TOOL_SLUG} />
+            <DownloadButton value={tool.output} filename="types.ts" mimeType="text/plain;charset=utf-8" analyticsTool={TOOL_SLUG} />
           </Stack>
           <TextField
             label="Root type name"

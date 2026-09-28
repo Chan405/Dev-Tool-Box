@@ -2,12 +2,15 @@
 
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Button from "@mui/material/Button";
+import { trackDownloadOutput } from "@/lib/analytics/product-analytics";
 
 type DownloadButtonProps = {
   value: string;
   filename: string;
   mimeType?: string;
   disabled?: boolean;
+  /** Registry slug for privacy-safe download analytics (metadata only). */
+  analyticsTool?: string;
 };
 
 export function DownloadButton({
@@ -15,6 +18,7 @@ export function DownloadButton({
   filename,
   mimeType = "text/plain;charset=utf-8",
   disabled = false,
+  analyticsTool,
 }: DownloadButtonProps) {
   const isDisabled = disabled || value.length === 0;
 
@@ -30,6 +34,10 @@ export function DownloadButton({
     anchor.download = filename;
     anchor.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 0);
+
+    if (analyticsTool) {
+      trackDownloadOutput(analyticsTool);
+    }
   }
 
   return (

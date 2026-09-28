@@ -19,6 +19,9 @@ import { OutputArea } from "@/components/tool-ui/OutputArea";
 import { ToolPrivacyAlert } from "@/components/tool-ui/ToolPrivacyAlert";
 import { JWT_EXAMPLE } from "@/lib/examples/tool-examples";
 import { decodeJwt, type JwtDecodeSuccess, type JwtTimeStatus } from "@/lib/jwt/decode-jwt";
+import { trackToolAction } from "@/lib/analytics/product-analytics";
+
+const TOOL_SLUG = "jwt-decoder";
 
 function statusChipColor(status: JwtTimeStatus): "default" | "success" | "warning" | "error" {
   switch (status) {
@@ -43,6 +46,7 @@ export function JwtDecoderTool() {
   const handleDecode = useCallback(() => {
     const result = decodeJwt(token);
     if (result.ok) {
+      trackToolAction(TOOL_SLUG, "decode");
       setDecoded(result);
       setError(null);
       return;
@@ -87,7 +91,7 @@ export function JwtDecoderTool() {
         <Button type="button" onClick={handleClear} disabled={!hasToken && !decoded}>
           Clear
         </Button>
-        <CopyButton value={decoded?.payloadJson ?? ""} disabled={!decoded} />
+        <CopyButton value={decoded?.payloadJson ?? ""} disabled={!decoded} analyticsTool={TOOL_SLUG} />
       </Stack>
 
       {decoded ? (
