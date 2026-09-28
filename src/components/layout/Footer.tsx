@@ -21,12 +21,18 @@ export function Footer() {
         <Typography variant="body2" color="text.secondary">
           © 2026 {site.name}. Utilities for everyday development work.
         </Typography>
-        <Stack component="nav" aria-label="Footer" direction="row" spacing={2}>
+        <Stack component="nav" aria-label="Footer" direction="row" spacing={2} useFlexGap sx={{ flexWrap: "wrap" }}>
           <AppLink href="/" color="text.secondary">
             Home
           </AppLink>
           <AppLink href="/tools" color="text.secondary">
             Tools
+          </AppLink>
+          <AppLink href="/about" color="text.secondary">
+            About
+          </AppLink>
+          <AppLink href="/privacy" color="text.secondary">
+            Privacy
           </AppLink>
         </Stack>
       </Container>

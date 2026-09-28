@@ -1,9 +1,9 @@
-import { csvToJson } from "../src/lib/csv/parse-csv-to-json.ts";
-import { jsonToCsv } from "../src/lib/csv/json-to-csv.ts";
-import { formatJson } from "../src/lib/json/format-json.ts";
-import { decodeJwt } from "../src/lib/jwt/decode-jwt.ts";
-import { jsonToTypescript } from "../src/lib/typescript/json-to-typescript.ts";
-import { jsonToZod } from "../src/lib/zod/json-to-zod.ts";
+import { csvToJson } from "../src/lib/csv/parse-csv-to-json";
+import { jsonToCsv } from "../src/lib/csv/json-to-csv";
+import { formatJson } from "../src/lib/json/format-json";
+import { decodeJwt } from "../src/lib/jwt/decode-jwt";
+import { jsonToTypescript } from "../src/lib/typescript/json-to-typescript";
+import { jsonToZod } from "../src/lib/zod/json-to-zod";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
