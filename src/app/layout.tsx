@@ -30,6 +30,9 @@ export const metadata: Metadata = {
     siteName: site.name,
     type: "website",
   },
+  verification: {
+    google: "google7fa11042723d2477",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
