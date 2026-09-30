@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import Box from "@mui/material/Box";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { site } from "@/lib/site";
+import { getMetadataBaseUrl, site } from "@/lib/site";
 import { ThemeRegistry } from "@/theme/ThemeRegistry";
 import "./globals.css";
 
@@ -19,6 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getMetadataBaseUrl(),
   title: {
     default: site.name,
     template: `%s · ${site.name}`,

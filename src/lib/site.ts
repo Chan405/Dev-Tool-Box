@@ -25,3 +25,7 @@ export function getSiteUrl(): string {
 
   return withProtocol.replace(/\/$/, "");
 }
+
+export function getMetadataBaseUrl(): URL {
+  return new URL(getSiteUrl());
+}

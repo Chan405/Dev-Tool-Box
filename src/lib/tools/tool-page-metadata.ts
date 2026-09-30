@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
-import { getToolBySlug } from "@/lib/tools/registry";
 
 type ToolPageMetadataInput = {
   slug: string;
@@ -10,16 +9,26 @@ type ToolPageMetadataInput = {
 };
 
 export function createToolPageMetadata({ slug, title, description, keywords }: ToolPageMetadataInput): Metadata {
-  const tool = getToolBySlug(slug);
+  const canonicalPath = `/tools/${slug}`;
+  const openGraphTitle = `${title} · ${site.name}`;
 
   return {
     title,
-    description: tool?.description ?? description,
+    description,
     keywords,
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
-      title: `${title} · ${site.name}`,
+      title: openGraphTitle,
       description,
       type: "website",
+      url: canonicalPath,
+    },
+    twitter: {
+      card: "summary",
+      title: openGraphTitle,
+      description,
     },
   };
 }
