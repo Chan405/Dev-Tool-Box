@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { RelatedTools } from "@/components/tools/RelatedTools";
+import { ToolAboutParagraph } from "@/components/tools/ToolAboutParagraph";
+import { ToolFaq } from "@/components/tools/ToolFaq";
 import { ToolLayout } from "@/components/tools/ToolLayout";
+import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
 import { buildToolPageJsonLd } from "@/lib/seo/tool-json-ld";
 import { createToolPageMetadata } from "@/lib/tools/tool-page-metadata";
 import { getToolBySlug } from "@/lib/tools/registry";
@@ -43,22 +43,46 @@ export default function JsonFormatterPage() {
       <ToolLayout tool={tool}>
         <JsonFormatter />
 
-        <Box component="section" aria-labelledby="json-formatter-about" sx={{ mt: { xs: 5, md: 6 }, maxWidth: 720 }}>
-          <Typography id="json-formatter-about" component="h2" variant="h2" sx={{ mb: 1.5 }}>
-            Format JSON online, privately
-          </Typography>
-          <Typography color="text.secondary" sx={{ lineHeight: 1.7, mb: 1.5 }}>
-            Use this JSON formatter to pretty-print messy payloads, minify JSON for APIs and config files, or validate
-            syntax before you commit or deploy. It works like a JSON beautifier and validator in one place—handy when you
-            are debugging API responses, editing <code>package.json</code>, or cleaning up copied logs.
-          </Typography>
-          <Typography color="text.secondary" sx={{ lineHeight: 1.7 }}>
-            Everything runs in your browser with the built-in <code>JSON.parse</code> engine, so your data stays on your
-            machine. Paste JSON, choose an action, then copy or download the result as a <code>.json</code> file.
-          </Typography>
-        </Box>
-
-        <RelatedTools currentSlug={tool.slug} />
+        <ToolPageFooter
+          slug={tool.slug}
+          aboutId="json-formatter-about"
+          aboutTitle="Format JSON online, privately"
+          faq={
+            <ToolFaq
+              id="json-formatter-faq"
+              items={[
+                {
+                  question: "Can I format JSON with comments?",
+                  answer:
+                    "No. Comments and trailing commas are not valid standard JSON, so parsing fails. Remove them, then format again.",
+                },
+                {
+                  question: "Does the formatter upload my JSON?",
+                  answer:
+                    "No. Formatting, minifying, and validation run in your browser. The JSON you paste is not uploaded for processing.",
+                },
+                {
+                  question: "What is the difference between formatting and minifying JSON?",
+                  answer:
+                    "Formatting pretty prints JSON with two-space indentation so it is easier to read. Minifying removes that whitespace and keeps the same values. Both need valid JSON.",
+                },
+              ]}
+            />
+          }
+        >
+          <ToolAboutParagraph>
+            Use this JSON formatter online to pretty print JSON with two-space indentation, minify a payload, or
+            validate JSON syntax. Pretty printing lays the same data out so it is easier to read—useful for API
+            responses, <code>package.json</code>, and copied logs. Minifying strips whitespace for a shorter copy.
+            Validation checks the text and, when it parses, shows that readable preview.
+          </ToolAboutParagraph>
+          <ToolAboutParagraph>
+            The tool accepts strict JSON only. Comments and trailing commas are rejected, and a parse error includes a
+            line, column, and a short snippet near the break. You can format JSON in the browser: it uses{" "}
+            <code>JSON.parse</code> on your machine and is not uploaded. Copy the result or download it as a{" "}
+            <code>.json</code> file.
+          </ToolAboutParagraph>
+        </ToolPageFooter>
       </ToolLayout>
     </>
   );

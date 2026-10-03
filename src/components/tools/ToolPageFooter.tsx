@@ -7,14 +7,16 @@ type ToolPageFooterProps = {
   aboutId: string;
   aboutTitle: string;
   children: ReactNode;
+  faq?: ReactNode;
 };
 
-export function ToolPageFooter({ slug, aboutId, aboutTitle, children }: ToolPageFooterProps) {
+export function ToolPageFooter({ slug, aboutId, aboutTitle, children, faq }: ToolPageFooterProps) {
   return (
     <>
       <ToolAboutSection id={aboutId} title={aboutTitle}>
         {children}
       </ToolAboutSection>
+      {faq}
       <RelatedTools currentSlug={slug} />
     </>
   );
