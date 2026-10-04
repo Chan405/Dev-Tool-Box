@@ -1,3 +1,4 @@
+import { AppLink } from "@/components/layout/AppLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ToolAboutParagraph } from "@/components/tools/ToolAboutParagraph";
 import { ToolFaq } from "@/components/tools/ToolFaq";
@@ -62,10 +63,14 @@ export default function JsonToZodPage() {
             root schema, then copy or download it. The sample stays in the browser.
           </ToolAboutParagraph>
           <ToolAboutParagraph>
-            TypeScript types describe data at compile time, while Zod schemas can validate data at runtime. In an array
-            of objects, a key that some items omit is marked <code>.optional()</code>. Mixed values on one field become{" "}
-            <code>z.union</code>. Email, UUID, and datetime formats are not inferred, and a numeric string is not
-            coerced into a number—it stays <code>z.string()</code> until you tighten the schema.
+            TypeScript types describe data at compile time, while Zod schemas can validate data at runtime. If you want
+            interfaces instead of runtime validation, use{" "}
+            <AppLink href="/tools/json-to-typescript" color="primary">
+              JSON to TypeScript
+            </AppLink>
+            . In an array of objects, a key that some items omit is marked <code>.optional()</code>. Mixed values on
+            one field become <code>z.union</code>. Email, UUID, and datetime formats are not inferred, and a numeric
+            string is not coerced into a number—it stays <code>z.string()</code> until you tighten the schema.
           </ToolAboutParagraph>
         </ToolPageFooter>
       </ToolLayout>

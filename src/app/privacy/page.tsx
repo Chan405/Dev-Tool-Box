@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import { AppLink } from "@/components/layout/AppLink";
 import { ToolAboutParagraph } from "@/components/tools/ToolAboutParagraph";
 import { site } from "@/lib/site";
 
@@ -24,8 +25,9 @@ export default function PrivacyPage() {
           Local-processing tools
         </Typography>
         <ToolAboutParagraph>
-          Several {site.name} tools—including the JSON formatter, JSON converters, CSV tools, and JWT decoder—run
-          entirely in your browser. The text you enter into those tools is processed on your device to produce output.
+          Several {site.name} tools in the{" "}
+          <AppLink href="/tools">tools catalog</AppLink>—including the JSON formatter, JSON converters, CSV tools, and
+          JWT decoder—run entirely in your browser. The text you enter into those tools is processed on your device to produce output.
           We do not intentionally send that content to our servers for conversion or storage as part of how those tools
           work.
         </ToolAboutParagraph>

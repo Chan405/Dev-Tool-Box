@@ -1,3 +1,4 @@
+import { AppLink } from "@/components/layout/AppLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ToolAboutParagraph } from "@/components/tools/ToolAboutParagraph";
 import { ToolFaq } from "@/components/tools/ToolFaq";
@@ -63,8 +64,12 @@ export default function JwtDecoderPage() {
           <ToolAboutParagraph>
             A JWT has three Base64URL segments: header, payload, and signature. This JWT decoder can decode the JWT
             header and payload as JSON and show JWT expiration from <code>exp</code>, plus <code>iat</code> and{" "}
-            <code>nbf</code> when those claims exist. The <code>alg</code> value in the header is displayed with the
-            rest of the header. It is not proof that the token is authentic.
+            <code>nbf</code> when those claims exist. For easier reading, paste decoded JSON into the{" "}
+            <AppLink href="/tools/json-formatter" color="primary">
+              JSON Formatter
+            </AppLink>
+            . The <code>alg</code> value in the header is displayed with the rest of the header. It is not proof that
+            the token is authentic.
           </ToolAboutParagraph>
           <ToolAboutParagraph>
             The signature is not verified. A readable token, including one that has not expired, can still be forged.

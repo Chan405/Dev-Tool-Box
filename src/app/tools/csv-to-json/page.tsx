@@ -1,3 +1,4 @@
+import { AppLink } from "@/components/layout/AppLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ToolAboutParagraph } from "@/components/tools/ToolAboutParagraph";
 import { ToolFaq } from "@/components/tools/ToolFaq";
@@ -63,7 +64,12 @@ export default function CsvToJsonPage() {
           </ToolAboutParagraph>
           <ToolAboutParagraph>
             Every cell is a string, and an empty cell becomes <code>null</code>. The parser expects commas between
-            columns, not tabs or semicolons. You can convert CSV in the browser; the text is not uploaded.
+            columns, not tabs or semicolons. You can convert CSV in the browser; the text is not uploaded. To turn JSON
+            back into a spreadsheet file, use{" "}
+            <AppLink href="/tools/json-to-csv" color="primary">
+              JSON to CSV
+            </AppLink>
+            .
           </ToolAboutParagraph>
         </ToolPageFooter>
       </ToolLayout>

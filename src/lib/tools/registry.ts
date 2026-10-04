@@ -119,11 +119,18 @@ export function getToolHref(tool: ToolDefinition): string | null {
   return `/tools/${tool.slug}`;
 }
 
+function sortAvailableFirst(toolList: readonly ToolDefinition[]): ToolDefinition[] {
+  const available = toolList.filter((tool) => tool.status === "available");
+  const comingSoon = toolList.filter((tool) => tool.status !== "available");
+
+  return [...available, ...comingSoon];
+}
+
 /** Same-category tools first, then the rest of the catalog (excluding the current tool). */
 export function getRelatedTools(current: ToolDefinition, limit = 6): ToolDefinition[] {
   const others = tools.filter((tool) => tool.slug !== current.slug);
-  const sameCategory = others.filter((tool) => tool.category === current.category);
-  const otherCategories = others.filter((tool) => tool.category !== current.category);
+  const sameCategory = sortAvailableFirst(others.filter((tool) => tool.category === current.category));
+  const otherCategories = sortAvailableFirst(others.filter((tool) => tool.category !== current.category));
 
   return [...sameCategory, ...otherCategories].slice(0, limit);
 }

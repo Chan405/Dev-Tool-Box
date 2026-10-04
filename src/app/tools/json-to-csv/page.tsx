@@ -1,3 +1,4 @@
+import { AppLink } from "@/components/layout/AppLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ToolAboutParagraph } from "@/components/tools/ToolAboutParagraph";
 import { ToolFaq } from "@/components/tools/ToolFaq";
@@ -63,7 +64,11 @@ export default function JsonToCsvPage() {
           </ToolAboutParagraph>
           <ToolAboutParagraph>
             A single object is not accepted, and neither is an empty array. Nested JSON in a CSV cell stays JSON text
-            rather than expanding into more columns.
+            rather than expanding into more columns. If you are starting from a CSV file, convert it with{" "}
+            <AppLink href="/tools/csv-to-json" color="primary">
+              CSV to JSON
+            </AppLink>{" "}
+            first.
           </ToolAboutParagraph>
         </ToolPageFooter>
       </ToolLayout>
