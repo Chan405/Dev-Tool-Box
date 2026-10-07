@@ -13,36 +13,46 @@ import { JSON_OBJECT_EXAMPLE } from "@/lib/examples/tool-examples";
 import { jsonToZod } from "@/lib/zod/json-to-zod";
 import { trackToolAction } from "@/lib/analytics/product-analytics";
 
-const TOOL_SLUG = "json-to-zod";
+type JsonToZodToolProps = {
+  example?: string;
+  analyticsSlug?: string;
+  inputId?: string;
+  outputId?: string;
+};
 
-export function JsonToZodTool() {
+export function JsonToZodTool({
+  example = JSON_OBJECT_EXAMPLE,
+  analyticsSlug = "json-to-zod",
+  inputId = "json-to-zod-input",
+  outputId = "json-to-zod-output",
+}: JsonToZodToolProps) {
   const tool = useDualPaneTool();
   const [rootName, setRootName] = useState("RootSchema");
 
   const handleConvert = useCallback(() => {
     const result = jsonToZod(tool.input, rootName);
     if (result.ok) {
-      trackToolAction(TOOL_SLUG, "convert");
+      trackToolAction(analyticsSlug, "convert");
       tool.applySuccess(result.output, "Zod schema generated successfully.");
       return;
     }
     tool.applyError("Could not generate schema", result.error);
-  }, [rootName, tool]);
+  }, [analyticsSlug, rootName, tool]);
 
   const handleLoadExample = useCallback(() => {
-    tool.onInputChange(JSON_OBJECT_EXAMPLE);
-  }, [tool]);
+    tool.onInputChange(example);
+  }, [example, tool]);
 
   return (
     <DualPaneToolWorkspace
-      inputId="json-to-zod-input"
-      outputId="json-to-zod-output"
+      inputId={inputId}
+      outputId={outputId}
       inputLabel="JSON input"
       outputLabel="Zod schema output"
       input={tool.input}
       onInputChange={tool.onInputChange}
       output={tool.output}
-      inputPlaceholder={JSON_OBJECT_EXAMPLE}
+      inputPlaceholder={example}
       outputPlaceholder="Generated Zod schema code will appear here."
       hasInputError={Boolean(tool.error)}
       successMessage={tool.successMessage}
@@ -62,8 +72,13 @@ export function JsonToZodTool() {
             <Button type="button" onClick={tool.clearAll} disabled={!tool.hasInput && !tool.hasOutput}>
               Clear
             </Button>
-            <CopyButton value={tool.output} analyticsTool={TOOL_SLUG} />
-            <DownloadButton value={tool.output} filename="schema.ts" mimeType="text/plain;charset=utf-8" analyticsTool={TOOL_SLUG} />
+            <CopyButton value={tool.output} analyticsTool={analyticsSlug} />
+            <DownloadButton
+              value={tool.output}
+              filename="schema.ts"
+              mimeType="text/plain;charset=utf-8"
+              analyticsTool={analyticsSlug}
+            />
           </Stack>
           <TextField
             label="Root schema name"

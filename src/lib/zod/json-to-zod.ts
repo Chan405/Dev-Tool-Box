@@ -34,9 +34,7 @@ class ZodEmitter {
     const inferred = inferFromJsonRoot(value);
     const rootExpr = this.emitType(inferred, this.rootName, "Root");
 
-    const blocks = [...this.schemas.entries()]
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name, body]) => `const ${name} = ${body};`);
+    const blocks = [...this.schemas.entries()].map(([name, body]) => `const ${name} = ${body};`);
 
     const lines = ["import { z } from \"zod\";", "", ...blocks];
 

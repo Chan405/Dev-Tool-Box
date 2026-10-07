@@ -25,6 +25,16 @@ const zod = jsonToZod(sample, "RootSchema");
 assert(zod.ok, "jsonToZod should succeed");
 assert(zod.ok && zod.output.includes("z.object"), "zod schema");
 
+const nested = jsonToZod(
+  `{"id":123,"profile":{"active":true}}`,
+  "RootSchema",
+);
+assert(nested.ok, "nested jsonToZod should succeed");
+assert(
+  nested.ok && nested.output.indexOf("const RootSchemaProfileSchema") < nested.output.indexOf("const RootSchema "),
+  "nested zod schema is declared before the root schema that references it",
+);
+
 const csv = `name,age\nAlice,25\nBob,30`;
 const csvJson = csvToJson(csv, { useFirstRowAsHeaders: true });
 assert(csvJson.ok, "csvToJson should succeed");

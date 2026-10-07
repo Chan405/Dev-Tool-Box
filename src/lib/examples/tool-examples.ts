@@ -4,6 +4,16 @@ export const JSON_OBJECT_EXAMPLE = `{
   "active": true
 }`;
 
+export const API_RESPONSE_EXAMPLE = `{
+  "id": 123,
+  "name": "Aye",
+  "email": "aye@example.com",
+  "roles": ["admin", "user"],
+  "profile": {
+    "active": true
+  }
+}`;
+
 export const JSON_ARRAY_EXAMPLE = `[
   {"name":"Alice","age":25},
   {"name":"Bob","age":30}

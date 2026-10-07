@@ -43,6 +43,16 @@ export const tools: readonly ToolDefinition[] = [
     status: "available",
   },
   {
+    name: "Generate Zod Schema from API Response",
+    slug: "api-response-to-zod",
+    description:
+      "Paste a sample API response and generate a Zod schema for TypeScript, Next.js, Node.js, or another TypeScript project.",
+    category: "json",
+    keywords: ["api", "response", "zod", "schema", "json", "typescript", "next.js", "validation"],
+    icon: "code",
+    status: "available",
+  },
+  {
     name: "JSON Minifier",
     slug: "json-minifier",
     description: "Remove whitespace from JSON without changing its structure.",
