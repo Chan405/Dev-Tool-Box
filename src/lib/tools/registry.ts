@@ -107,6 +107,16 @@ export const tools: readonly ToolDefinition[] = [
     status: "available",
   },
   {
+    name: "JWT Expiration Checker",
+    slug: "jwt-expiration-checker",
+    description:
+      "Check whether a JWT is expired, not yet valid, or still inside its exp window. Time claims only — the signature is not verified.",
+    category: "security",
+    keywords: ["jwt", "expiration", "exp", "nbf", "iat", "token", "claims"],
+    icon: "key",
+    status: "available",
+  },
+  {
     name: "Token Counter",
     slug: "token-counter",
     description: "Estimate how many tokens a piece of text will use.",

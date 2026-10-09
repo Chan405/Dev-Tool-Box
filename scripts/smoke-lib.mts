@@ -2,6 +2,7 @@ import { csvToJson } from "../src/lib/csv/parse-csv-to-json";
 import { jsonToCsv } from "../src/lib/csv/json-to-csv";
 import { formatJson } from "../src/lib/json/format-json";
 import { decodeJwt } from "../src/lib/jwt/decode-jwt";
+import { getJwtExpiration } from "../src/lib/jwt/jwt-expiration";
 import { jsonToTypescript } from "../src/lib/typescript/json-to-typescript";
 import { jsonToZod } from "../src/lib/zod/json-to-zod";
 
@@ -50,5 +51,45 @@ const jwt =
 const decoded = decodeJwt(jwt);
 assert(decoded.ok, "decodeJwt should succeed");
 assert(decoded.ok && decoded.payload.name === "John Doe", "jwt payload name");
+
+const nowMs = Date.UTC(2024, 0, 1);
+const nowSeconds = Math.floor(nowMs / 1000);
+
+function unsignedJwt(payload: Record<string, unknown>): string {
+  const encode = (value: unknown) => Buffer.from(JSON.stringify(value)).toString("base64url");
+  return `${encode({ alg: "none", typ: "JWT" })}.${encode(payload)}.sig`;
+}
+
+const valid = getJwtExpiration(
+  unsignedJwt({ exp: nowSeconds + 7200, nbf: nowSeconds - 10, iat: nowSeconds - 20 }),
+  nowMs,
+);
+assert(valid.status === "valid", "jwt exp valid");
+assert(valid.secondsRemaining === 7200, "jwt exp seconds remaining");
+assert(valid.exp === new Date((nowSeconds + 7200) * 1000).toISOString(), "jwt exp iso");
+
+const expired = getJwtExpiration(unsignedJwt({ exp: nowSeconds - 3600, iat: nowSeconds - 7200 }), nowMs);
+assert(expired.status === "expired", "jwt exp expired");
+assert(expired.secondsRemaining === -3600, "jwt exp negative remaining");
+
+const notYet = getJwtExpiration(unsignedJwt({ nbf: nowSeconds + 600, exp: nowSeconds + 3600 }), nowMs);
+assert(notYet.status === "not-yet-valid", "jwt exp not yet valid");
+
+const noExp = getJwtExpiration(unsignedJwt({ iat: nowSeconds }), nowMs);
+assert(noExp.status === "no-exp", "jwt exp missing");
+assert(noExp.exp === null, "jwt exp missing value");
+assert(noExp.iat === new Date(nowSeconds * 1000).toISOString(), "jwt iat iso");
+
+const stringExp = getJwtExpiration(unsignedJwt({ exp: String(nowSeconds + 100) }), nowMs);
+assert(stringExp.status === "invalid-exp", "jwt string exp");
+assert(stringExp.secondsRemaining === null, "jwt string exp has no remaining time");
+
+const millisecondExp = getJwtExpiration(unsignedJwt({ exp: (nowSeconds + 100) * 1000 }), nowMs);
+assert(millisecondExp.status === "invalid-exp", "jwt millisecond exp");
+assert(millisecondExp.message?.includes("milliseconds") === true, "jwt millisecond hint");
+assert(millisecondExp.secondsRemaining === null, "jwt millisecond exp is not converted");
+
+const malformed = getJwtExpiration("not-a-jwt", nowMs);
+assert(malformed.status === "invalid-token", "jwt malformed token");
 
 console.log("smoke-lib: all checks passed");

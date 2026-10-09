@@ -64,7 +64,11 @@ export default function JwtDecoderPage() {
           <ToolAboutParagraph>
             A JWT has three Base64URL segments: header, payload, and signature. This JWT decoder can decode the JWT
             header and payload as JSON and show JWT expiration from <code>exp</code>, plus <code>iat</code> and{" "}
-            <code>nbf</code> when those claims exist. For easier reading, paste decoded JSON into the{" "}
+            <code>nbf</code> when those claims exist. For a check focused on those times, use the{" "}
+            <AppLink href="/tools/jwt-expiration-checker" color="primary">
+              JWT Expiration Checker
+            </AppLink>
+            . For easier reading, paste decoded JSON into the{" "}
             <AppLink href="/tools/json-formatter" color="primary">
               JSON Formatter
             </AppLink>
