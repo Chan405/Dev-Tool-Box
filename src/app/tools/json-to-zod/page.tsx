@@ -45,7 +45,7 @@ export default function JsonToZodPage() {
                 {
                   question: "How are optional fields generated?",
                   answer:
-                    "A field is optional when the input is an array of objects and at least one object is missing that key. Keys on a single object are required.",
+                    "A missing key becomes .optional() only when the pasted JSON is a top-level array of objects and at least one object omits that key. Keys on a single object are required. When an array is nested inside an object, objects with different keys become a z.union of separate object schemas.",
                 },
                 {
                   question: "Does it detect email, UUID, or date formats automatically?",
@@ -68,8 +68,9 @@ export default function JsonToZodPage() {
             <AppLink href="/tools/json-to-typescript" color="primary">
               JSON to TypeScript
             </AppLink>
-            . In an array of objects, a key that some items omit is marked <code>.optional()</code>. Mixed values on
-            one field become <code>z.union</code>. Email, UUID, and datetime formats are not inferred, and a numeric
+            . In a top-level array of objects, a key that some items omit is marked <code>.optional()</code>. Arrays
+            nested inside an object become a <code>z.union</code> of separate object schemas instead. Email, UUID, and
+            datetime formats are not inferred, and a numeric
             string is not coerced into a number—it stays <code>z.string()</code> until you tighten the schema.
           </ToolAboutParagraph>
         </ToolPageFooter>

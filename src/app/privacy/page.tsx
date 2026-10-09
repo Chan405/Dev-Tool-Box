@@ -50,9 +50,9 @@ export default function PrivacyPage() {
           Analytics
         </Typography>
         <ToolAboutParagraph>
-          Basic usage analytics may be added or enabled separately from the content you paste into local-processing
-          tools. If we turn that on, it would be meant to understand traffic and feature use—not to collect the payload
-          you enter into browser-based converters. This page will be updated if that changes.
+          Vercel Analytics records page views and basic usage. For button events, the app sends only a tool slug and
+          an action name. Pasted JSON and generated output are never included in those events. Loading a page still
+          requests that page from hosting, as described above.
         </ToolAboutParagraph>
 
         <Typography component="h2" variant="h2" sx={{ fontSize: "1.25rem", mb: 1.5, mt: 3 }}>

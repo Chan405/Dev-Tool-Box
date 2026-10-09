@@ -85,7 +85,8 @@ class TypescriptEmitter {
         return type.members.map((member) => this.emitType(member, nameHint, context)).join(" | ");
       case "array": {
         const element = this.emitType(type.element, `${nameHint}Item`, `${context}Item`);
-        return `${element}[]`;
+        const elementType = type.element.kind === "union" ? `(${element})` : element;
+        return `${elementType}[]`;
       }
       case "object": {
         if (!isNamedObject(type)) {

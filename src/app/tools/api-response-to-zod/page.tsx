@@ -82,7 +82,7 @@ export default function ApiResponseToZodPage() {
             strings, so it becomes <code>z.array(z.string())</code>. <code>profile</code> is an object, so{" "}
             <code>active</code> becomes <code>z.boolean()</code> on a nested schema, and the root object references that
             schema. The file starts with <code>import {"{ z }"} from &quot;zod&quot;;</code> and exports the root schema.
-            Every key in this object is required, because the sample never omits one.
+            Every key is required in this built-in sample only, because that one object never omits a key.
           </ToolAboutParagraph>
           <ToolAboutParagraph>
             Rename the root schema before you generate if you want a name that matches the endpoint. If you need
@@ -107,10 +107,14 @@ export default function ApiResponseToZodPage() {
             <code>&quot;123&quot;</code>, stays <code>z.string()</code> rather than becoming <code>z.number()</code>.
           </ToolAboutParagraph>
           <ToolAboutParagraph>
-            Optional fields appear when the sample gives evidence for them. On one object, each key that is present is
-            required. When the input is an array of objects and at least one object omits a key, that key is marked{" "}
-            <code>.optional()</code>. If the same field holds different JSON types across those objects, the converter
-            emits <code>z.union</code> for the types it saw.
+            A missing key becomes <code>.optional()</code> only when the pasted JSON is a top-level array of objects and
+            at least one object omits that key. On one object, each key that is present is required. When an array is
+            nested inside an object, such as <code>orders</code>, objects with different keys become a{" "}
+            <code>z.union</code> of separate object schemas. You can merge those into one schema and add{" "}
+            <code>.optional()</code> by hand. In a top-level array of objects, a field with different JSON types becomes{" "}
+            <code>z.union</code> of those types. In a nested array, those objects become a <code>z.union</code> of
+            separate object schemas. An empty array is inferred as <code>z.array(z.null())</code>, so
+            a sample with empty arrays says nothing about their items.
           </ToolAboutParagraph>
         </ToolAboutSection>
 
@@ -135,7 +139,7 @@ export default function ApiResponseToZodPage() {
             {
               question: "Can Zod infer optional fields from one response?",
               answer:
-                "A single object treats every present key as required. A field becomes optional when you paste an array of objects and at least one object leaves that key out.",
+                "On one object, every present key is required. A missing key becomes .optional() only when the pasted JSON is a top-level array of objects and at least one object leaves that key out. When an array is nested inside an object, such as orders, objects with different keys become a z.union of separate object schemas. Merge those into one schema and add .optional() yourself if you need a single shape.",
             },
             {
               question: "Does it detect dates, UUIDs, or email addresses automatically?",

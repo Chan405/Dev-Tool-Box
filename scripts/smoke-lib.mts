@@ -92,4 +92,80 @@ assert(millisecondExp.secondsRemaining === null, "jwt millisecond exp is not con
 const malformed = getJwtExpiration("not-a-jwt", nowMs);
 assert(malformed.status === "invalid-token", "jwt malformed token");
 
+function assertTypescript(input: string, expected: string) {
+  const result = jsonToTypescript(input, "Root");
+  assert(result.ok, `jsonToTypescript should succeed for ${input}`);
+  assert(
+    result.ok && result.output === expected,
+    `jsonToTypescript output mismatch for ${input}\n--- actual ---\n${result.ok ? result.output : ""}\n--- expected ---\n${expected}`,
+  );
+}
+
+assertTypescript(
+  `{"orders":[{"orderId":"a","coupon":"X"},{"orderId":"b"}]}`,
+  `interface Root {
+  orders: (RootOrdersItem | RootOrdersItem2)[];
+}
+
+interface RootOrdersItem {
+  orderId: string;
+  coupon: string;
+}
+
+interface RootOrdersItem2 {
+  orderId: string;
+}`,
+);
+
+assertTypescript(
+  `{"items":[{"v":1},{"v":"a"}]}`,
+  `interface Root {
+  items: (RootItemsItem | RootItemsItem2)[];
+}
+
+interface RootItemsItem {
+  v: number;
+}
+
+interface RootItemsItem2 {
+  v: string;
+}`,
+);
+
+assertTypescript(`[1, "a"]`, `type Root = (number | string)[];`);
+
+assertTypescript(
+  `{"x":[1,"a"]}`,
+  `interface Root {
+  x: (number | string)[];
+}`,
+);
+
+assertTypescript(
+  `{"x":[null,"a"]}`,
+  `interface Root {
+  x: (null | string)[];
+}`,
+);
+
+assertTypescript(`[[1],["a"]]`, `type Root = (number[] | string[])[];`);
+
+assertTypescript(
+  `{"x":[[1,"a"]]}`,
+  `interface Root {
+  x: (number | string)[][];
+}`,
+);
+
+assertTypescript(
+  `{"a":[{"id":1},{"id":2}]}`,
+  `interface Root {
+  a: RootAItem[];
+}
+
+interface RootAItem {
+  id: number;
+}`,
+);
+
 console.log("smoke-lib: all checks passed");

@@ -40,7 +40,7 @@ export default function JsonToTypescriptPage() {
                 {
                   question: "How are optional properties inferred?",
                   answer:
-                    "Optional properties appear when the sample is an array of objects and some objects omit a key. A single object treats every key it contains as required.",
+                    "Optional properties appear only when the pasted JSON is a top-level array of objects and some objects omit a key. A single object treats every key it contains as required. When an array nested inside an object contains objects with different keys, each shape becomes its own interface and the property is a union of those interfaces inside an array type, such as (First | Second)[].",
                 },
                 {
                   question: "How are null values handled?",
@@ -62,8 +62,8 @@ export default function JsonToTypescriptPage() {
             <code>.ts</code> file. Conversion runs in the browser.
           </ToolAboutParagraph>
           <ToolAboutParagraph>
-            A property is optional only when some objects in an array leave that key out. Null stays <code>null</code>,
-            and a field that is sometimes null becomes a union. An empty array has no items to inspect, so its element
+            A property is optional only when some objects in a top-level array leave that key out. Null stays{" "}
+            <code>null</code>, and a field that is sometimes null becomes a union. An empty array has no items to inspect, so its element
             type is <code>null</code> until you add a sample item. Dates remain strings because JSON does not record a
             date type. If you need runtime validation, generate a schema with the{" "}
             <AppLink href="/tools/json-to-zod" color="primary">
